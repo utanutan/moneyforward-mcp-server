@@ -100,7 +100,7 @@ def load_accounts(config_path: str | None = None) -> list[dict[str, Any]]:
     if not path.exists():
         raise FileNotFoundError(f"Accounts config not found: {path}")
 
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         data = yaml.safe_load(f)
 
     return data.get("accounts", [])

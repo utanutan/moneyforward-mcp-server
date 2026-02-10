@@ -77,7 +77,7 @@ async def lifespan(server):
     # Load selectors
     try:
         selectors_path = Path(settings.selectors_path)
-        with open(selectors_path) as f:
+        with open(selectors_path, encoding="utf-8") as f:
             selectors = yaml.safe_load(f)
         logger.info("selectors_loaded", path=str(selectors_path))
     except Exception as e:
