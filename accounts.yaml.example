@@ -1,0 +1,19 @@
+# Manual accounts managed via MCP server
+# Copy this file to accounts.yaml and update with your account details
+accounts:
+  # 国内口座（JPY）の例
+  - name: "Example JP Bank"
+    type: bank
+    currency: JPY        # 通貨コード（JPY の場合は為替換算なし）
+    mf_display_name: "Example JP Bank"  # MoneyForward ME上の表示名
+
+  # 海外口座（外貨建て）の例 — 為替レートAPIでJPY換算
+  - name: "Example MY Bank"
+    type: bank
+    currency: MYR
+    mf_display_name: "Example MY Bank"
+
+  - name: "Example US Bank"
+    type: bank
+    currency: USD
+    mf_display_name: "Example US Bank"
