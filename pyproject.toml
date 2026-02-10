@@ -1,0 +1,51 @@
+[project]
+name = "moneyforward-mcp-server"
+version = "0.1.0"
+description = "MoneyForward ME MCP Server - AI-accessible personal finance data via Playwright automation"
+license = "MIT"
+authors = [{name = "utanutan5"}]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastmcp<3",
+    "playwright>=1.58",
+    "aiosqlite>=0.22",
+    "pyotp>=2.9",
+    "structlog>=24.0",
+    "pydantic-settings>=2.0",
+    "pyyaml>=6.0",
+    "httpx>=0.27",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.8",
+    "mypy>=1.13",
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[project.urls]
+Repository = "https://github.com/carpediem/moneyforward-mcp-server"

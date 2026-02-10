@@ -1,0 +1,7 @@
+# Manual accounts managed via MCP server
+# Copy this file to accounts.yaml and update with your account details
+accounts:
+  - name: "Example Bank"
+    type: bank           # bank or securities
+    currency: MYR        # foreign currency code
+    mf_display_name: "Example Bank"  # MoneyForward ME上の表示名

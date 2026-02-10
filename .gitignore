@@ -1,0 +1,74 @@
+# Environment variables
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Package management
+uv.lock
+*.egg-info/
+dist/
+build/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Type checking
+.mypy_cache/
+.pytype/
+.pyre/
+
+# Linting
+.ruff_cache/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Browser context and cache
+browser-context/
+playwright/.auth/
+
+# Logs
+logs/
+*.log
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Claude Code (personal settings only)
+.claude/settings.local.json
+CLAUDE.local.md
+
+# Template metadata
+.project-meta.json
+
+# Empty dirs
+tracks/
+
+# Manual account configuration (contains sensitive info)
+accounts.yaml

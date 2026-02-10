@@ -1,0 +1,60 @@
+# MoneyForward ME CSS Selectors
+# UI変更時はこのファイルのみ更新する
+
+auth:
+  login_url: "https://id.moneyforward.com/sign_in"
+  email_input: 'input[name="mfid_user[email]"]'
+  password_input: 'input[name="mfid_user[password]"]'
+  submit_button: '#submitto'
+  otp_input: 'input[name="mfid_user[code]"]'
+  otp_submit: 'input[type="submit"]'
+  account_selector_indicator: 'アカウントを選択する'
+  logged_in_indicator: "#page-portfolio"
+
+portfolio:
+  url: "https://moneyforward.com/bs/portfolio"
+  total_assets: "div.heading-radius-box.mf-mb20"
+  daily_change: "section.bs-total-assets .plus-minus"
+  asset_breakdown:
+    table: "section.bs-summary table"
+    row: "section.bs-summary table tbody tr"
+    name: "td:nth-child(1)"
+    value: "td:nth-child(2)"
+
+transactions:
+  url: "https://moneyforward.com/cf"
+  table: "#cf-detail-table"
+  rows: "#cf-detail-table tbody tr"
+  date: "td:nth-child(1)"
+  description: "td:nth-child(2)"
+  amount: "td:nth-child(3)"
+  category: "td:nth-child(4)"
+  pagination:
+    next_button: ".pagination .next a"
+
+budget:
+  url: "https://moneyforward.com/spending"
+  total_budget: ".total-budget"
+  total_spent: ".total-spent"
+  remaining: ".remaining"
+  categories: ".category-item"
+  category_breakdown:
+    table: "TODO_SELECTOR"
+    row: "TODO_SELECTOR"
+    name: "TODO_SELECTOR"
+    budget_amount: "TODO_SELECTOR"
+    spent_amount: "TODO_SELECTOR"
+
+refresh:
+  url: "https://moneyforward.com/accounts"
+  refresh_button: ".btn-refresh-all"
+  status_indicator: ".refresh-status"
+  last_updated: ".last-updated"
+
+manual_accounts:
+  accounts_url: "https://moneyforward.com/accounts"
+  default_asset_subclass_id: "3"  # 外貨預金
+
+session_check:
+  logged_in_indicator: "#page-portfolio"
+  logout_button: ".logout-link"
