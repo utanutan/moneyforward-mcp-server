@@ -330,15 +330,16 @@ async def list_manual_accounts() -> dict:
 
 # Tool: Update Manual Account
 @mcp.tool()
-async def update_manual_account(account_name: str, amount_myr: float) -> dict:
-    """Update a manual account balance with MYR to JPY conversion.
+async def update_manual_account(account_name: str, amount: float) -> dict:
+    """Update a manual account balance with foreign currency to JPY conversion.
 
-    Converts the specified MYR amount to JPY using a live exchange rate,
+    Converts the specified foreign currency amount to JPY using a live exchange rate,
     then updates the corresponding manual account on MoneyForward ME.
+    The currency is determined from the account's configuration in accounts.yaml.
 
     Args:
         account_name: Account name as defined in accounts.yaml (e.g., "Wise", "CIMB")
-        amount_myr: Current balance in MYR (Malaysian Ringgit)
+        amount: Current balance in the account's foreign currency
 
     Returns:
         Dictionary containing:
@@ -346,9 +347,9 @@ async def update_manual_account(account_name: str, amount_myr: float) -> dict:
             - data: Update result (if success)
                 - account_name: Account name (str)
                 - mf_display_name: MoneyForward ME display name (str)
-                - amount_myr: Original MYR amount (float)
+                - amount_foreign: Original foreign currency amount (float)
                 - amount_jpy: Converted JPY amount (int)
-                - exchange_rate: MYR to JPY rate used (float)
+                - exchange_rate: Exchange rate used (float)
                 - currency: Currency code (str)
                 - updated_at: ISO 8601 timestamp (str)
             - metadata: Response metadata
@@ -362,7 +363,7 @@ async def update_manual_account(account_name: str, amount_myr: float) -> dict:
             "error": {"message": "Server not initialized", "type": "INITIALIZATION_ERROR"},
         }
 
-    return await update_account_impl(scraper, account_name, amount_myr)
+    return await update_account_impl(scraper, account_name, amount)
 
 
 # HTTP health endpoint (for Docker healthcheck)

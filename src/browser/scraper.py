@@ -398,7 +398,7 @@ class MoneyForwardScraper:
             raise ScraperError(f"Health check failed: {e}") from e
 
     async def update_manual_account_balance(
-        self, mf_display_name: str, amount_jpy: int
+        self, mf_display_name: str, amount_jpy: int, *, currency: str = "MYR"
     ) -> None:
         """Update a manual account balance on MoneyForward ME.
 
@@ -411,6 +411,7 @@ class MoneyForwardScraper:
         Args:
             mf_display_name: Display name of the account on MoneyForward ME.
             amount_jpy: New balance in JPY.
+            currency: Foreign currency code (e.g., "MYR", "USD").
 
         Raises:
             ScraperError: If the update operation fails.
@@ -502,7 +503,7 @@ class MoneyForwardScraper:
                 name_input = page.locator(
                     '#modal_asset_new input[name="user_asset_det[name]"]'
                 )
-                await name_input.fill(f"{mf_display_name} (MYR)")
+                await name_input.fill(f"{mf_display_name} ({currency})")
 
                 # Fill amount
                 value_input = page.locator(

@@ -1,7 +1,7 @@
 """MCP tools for managing manual accounts with foreign currency support.
 
 This module provides tools for listing and updating manual accounts
-on MoneyForward ME, with MYR to JPY currency conversion.
+on MoneyForward ME, with foreign currency to JPY conversion.
 """
 
 from typing import Any
@@ -13,9 +13,6 @@ from src.config import load_accounts
 from src.tools.common import build_error_response, build_success_response
 
 logger = structlog.get_logger(__name__)
-
-EXCHANGE_RATE_API_URL = "https://open.er-api.com/v6/latest/MYR"
-
 
 async def list_manual_accounts() -> dict[str, Any]:
     """List manual accounts from accounts.yaml configuration.
@@ -90,14 +87,14 @@ async def _get_exchange_rate(from_currency: str, to_currency: str) -> float:
 async def update_manual_account(
     scraper: Any,
     account_name: str,
-    amount_myr: float,
+    amount: float,
 ) -> dict[str, Any]:
-    """Update a manual account balance on MoneyForward ME with MYR to JPY conversion.
+    """Update a manual account balance on MoneyForward ME with foreign currency to JPY conversion.
 
     Args:
         scraper: MoneyForwardScraper instance.
         account_name: Account name as defined in accounts.yaml.
-        amount_myr: Balance amount in MYR.
+        amount: Balance amount in the account's foreign currency.
 
     Returns:
         Standardized response containing update result with conversion details.
@@ -105,7 +102,7 @@ async def update_manual_account(
     logger.info(
         "update_manual_account_called",
         account_name=account_name,
-        amount_myr=amount_myr,
+        amount=amount,
     )
 
     try:
@@ -124,20 +121,23 @@ async def update_manual_account(
             )
 
         # Get exchange rate
-        rate = await _get_exchange_rate(target["currency"], "JPY")
-        amount_jpy = int(amount_myr * rate)
+        currency = target["currency"]
+        rate = await _get_exchange_rate(currency, "JPY")
+        amount_jpy = int(amount * rate)
 
         logger.info(
             "currency_converted",
-            from_currency=target["currency"],
-            amount_myr=amount_myr,
+            from_currency=currency,
+            amount=amount,
             rate=rate,
             amount_jpy=amount_jpy,
         )
 
         # Update on MoneyForward ME
         mf_display_name = target["mf_display_name"]
-        await scraper.update_manual_account_balance(mf_display_name, amount_jpy)
+        await scraper.update_manual_account_balance(
+            mf_display_name, amount_jpy, currency=currency
+        )
 
         from datetime import datetime, timedelta, timezone
 
@@ -147,10 +147,10 @@ async def update_manual_account(
             {
                 "account_name": account_name,
                 "mf_display_name": mf_display_name,
-                "amount_myr": amount_myr,
+                "amount_foreign": amount,
                 "amount_jpy": amount_jpy,
                 "exchange_rate": rate,
-                "currency": target["currency"],
+                "currency": currency,
                 "updated_at": datetime.now(jst).isoformat(),
             },
             source="scraping",

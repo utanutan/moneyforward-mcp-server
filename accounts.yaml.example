@@ -5,3 +5,8 @@ accounts:
     type: bank           # bank or securities
     currency: MYR        # foreign currency code
     mf_display_name: "Example Bank"  # MoneyForward ME上の表示名
+
+  - name: "Example US Bank"
+    type: bank
+    currency: USD
+    mf_display_name: "Example US Bank"

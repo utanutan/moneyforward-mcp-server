@@ -45,7 +45,7 @@ MCP Client (Claude Code / Claude Desktop / Cursor)
 | `trigger_refresh` | 連携口座の一括更新を実行 |
 | `health_check` | サーバー・ブラウザ・セッションの状態確認 |
 | `list_manual_accounts` | 手入力口座の一覧を取得 |
-| `update_manual_account` | 手入力口座の残高を外貨→JPY換算で更新 |
+| `update_manual_account` | 手入力口座の残高を外貨→JPY換算で更新（通貨は accounts.yaml の設定に従う） |
 
 ## 必要環境
 
@@ -107,7 +107,7 @@ uv run fastmcp run src/server.py --transport streamable-http --host 127.0.0.1 --
 
 ### 手入力口座（外貨建て）
 
-マレーシアなど海外の金融口座を MYR 建てで管理し、為替レート API で JPY 換算して MoneyForward ME に登録する機能です。
+海外の金融口座を外貨建てで管理し、為替レート API で JPY 換算して MoneyForward ME に登録する機能です。`accounts.yaml` の `currency` フィールドで通貨コード（MYR, USD, EUR など）を指定します。
 
 ```bash
 cp accounts.yaml.example accounts.yaml
@@ -139,16 +139,29 @@ cp accounts.yaml.example accounts.yaml
 claude mcp add moneyforward-mcp --transport http http://127.0.0.1:8000/mcp
 ```
 
-## ログインフロー
+## ログインについて
 
-MoneyForward ME のログインは以下の流れで自動処理されます:
+サーバー起動後、初めて MCP ツールを呼び出すと MoneyForward ME への自動ログインが行われます。メールアドレス・パスワード・TOTP は `.env` の設定値で自動入力されるため、通常は操作不要です。
 
-1. **メールアドレス入力**（別ページ）
-2. **パスワード入力**（別ページ）
-3. **Email OTP**（リスクベース認証時のみ。`/tmp/mf-otp-code.txt` にコードを書き込むと自動入力）
-4. **アカウントセレクタ**（複数アカウント時、自動選択）
+### Email OTP を求められた場合
 
-ブラウザの永続コンテキスト（`./browser-context/`）にセッションが保存されるため、初回ログイン後は OTP 不要です。
+MoneyForward ME は新しいブラウザからのログイン時に、登録メールアドレス宛に確認コード（6桁）を送信することがあります。この場合、サーバーのログに以下のようなメッセージが表示されます:
+
+```
+otp_waiting_for_code  file=/tmp/mf-otp-code.txt
+```
+
+メールに届いた確認コードを、以下のコマンドでファイルに書き込んでください:
+
+```bash
+echo "123456" > /tmp/mf-otp-code.txt
+```
+
+サーバーがファイルを検知して自動入力します（120秒以内）。
+
+### 2回目以降のログイン
+
+ブラウザのセッションが `./browser-context/` に保存されるため、一度ログインに成功すれば以降は OTP なしで自動ログインされます。セッションが切れた場合のみ再度ログインが発生します。
 
 ## 開発
 
